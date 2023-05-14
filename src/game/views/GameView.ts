@@ -18,20 +18,9 @@ export class GameView implements View {
         // if (model.debug) {
         // }
         
-        this.context.fillStyle = "#0f0";
-        this.context.fillText(
-            model.current_text,
-            400,
-            300,
-        );
         this.context.fillStyle = "#fff";
         model.entities.forEach((entity) => {
-            this.context.fillStyle = entity.color;
-            this.context.fillText(
-                entity.label,
-                entity.hitbox.center.x,
-                entity.hitbox.center.y
-            );
+            this.context.drawImage(entity.image.image, entity.hitbox.x, entity.hitbox.y, entity.hitbox.w, entity.hitbox.h);
             if (model.debug) {
                 this.context.strokeStyle = "#f00";
                 this.context.strokeRect(
@@ -52,6 +41,7 @@ export class GameView implements View {
         this.context.font = "46px monospace";
         this.context.textAlign = "center";
         this.context.textBaseline = "middle";
-        this.context.imageSmoothingEnabled = false;
+        this.context.imageSmoothingEnabled = true;
+        this.context.imageSmoothingQuality = 'high';
     }
 }

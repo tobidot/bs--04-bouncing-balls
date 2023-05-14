@@ -5,7 +5,6 @@ import { Entity } from "./Entity";
 export class GameModel {
     public physics: AABBPhysicsEngine;
     public entities: Entity[] = [];
-    public current_text: string = "";
     public debug: boolean = false;
 
     constructor(
@@ -21,7 +20,6 @@ export class GameModel {
     public restart() {
         this.physics = new AABBPhysicsEngine(this.physics.world_box);
         this.entities = [];
-        this.current_text = "Press Enter";
         this.debug = false;
     }
 
@@ -44,10 +42,11 @@ export class GameModel {
     public createEntity(label: string) :Entity {
         let entity: Entity;
         const position = this.physics.world_box.center.cpy();
+        const color = ["red","green","blue","cyan"][Math.floor(Math.random() * 4)];
+        const image_name = `ball-${color}`;
         this.entities.push(entity = new Entity(
             position,
-            label, 
-            this.context
+            window.game.assets.getImage(image_name)
         ));
         entity.physics_id = this.physics.add(new AABBCollisionProxy(
             entity.hitbox,

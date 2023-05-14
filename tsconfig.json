@@ -8,6 +8,7 @@
     "noImplicitAny": false,
     "noEmit": true,
     "target": "ES2015",
+    "types": ["vite/client"]
   },
   "include": ["src/**/*"]
 }

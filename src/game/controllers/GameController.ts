@@ -38,35 +38,6 @@ export class GameController implements Controller, KeyboardController {
         return null;
     }
 
-    /**
-     * Break words into single characters
-     */
-    public breakWords() {
-        const font_width = this.model.context.measureText("_").width;
-        // split all entities into single characters
-        this.model.entities = this.model.entities
-            .reduce(
-                (sum: Array<Entity>, entity: Entity) => {
-                    if (entity.label.length == 1) {
-                        return sum.concat(entity);
-                    }
-                    if (entity.physics_id !== null)  {
-                        this.model.physics.remove(entity.physics_id);
-                    }
-                    return sum.concat(
-                        entity.label.split("").map(
-                            (char: string, index: number) => {
-                                const new_entity = this.model.createEntity(char);
-                                new_entity.hitbox.center.y = entity.hitbox.center.y;
-                                new_entity.hitbox.center.x = entity.hitbox.left + font_width * index + font_width / 2;
-                                return new_entity;
-                            }
-                        )
-                    );
-                }, []
-            );
-    }
-
     public onKeyUp(event: KeyboardEvent): void {
     }
 
@@ -78,31 +49,18 @@ export class GameController implements Controller, KeyboardController {
                 case KeyName.KeyR:
                     this.newGame();
                     return;
-                case KeyName.KeyB:
-                    this.breakWords();
-                    return;
                 case KeyName.KeyD:
                     this.model.debug = !this.model.debug;
                     return;
-                case KeyName.KeyC:
-                    this.model.current_text = "";
-                    return;
             }
         }
-        const is_alt_down = kb.getKey(KeyName.Alt).is_down;
-        const is_meta_down = kb.getKey(KeyName.Meta).is_down;
-        if (!is_alt_down && !is_meta_down && event.key.name.match(/^[a-zA-Z0-9 ]$/)) {
-            this.model.current_text += event.key.name;
-        }
-        if (event.key.name === KeyName.Backspace) {
-            this.model.current_text = this.model.current_text.slice(0, -1);
-        }
-        if (event.key.name === KeyName.Enter) {
-            const entity = this.model.createEntity(this.model.current_text);
-            if (entity.hitbox.w > 799) {
-                this.breakWords();
-            }
-            this.model.current_text = "";
+        if (event.key.name === KeyName.Space) {
+            const entity = this.model.createEntity("O");
+            entity.color = ["red", "green", "blue", "yellow", "orange", "purple"][Math.floor(Math.random() * 6)];
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 100 + 50;
+            entity.velocity.x = Math.cos(angle) * speed;
+            entity.velocity.y = Math.sin(angle) * speed;
         }
     }
 }
