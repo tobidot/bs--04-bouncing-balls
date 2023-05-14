@@ -6,4 +6,5 @@ export function registerAssets(asset_manager: AssetManager) {
     asset_manager.addImage("ball-red", assets.ball_red);
     asset_manager.addImage("ball-green", assets.ball_green);
     asset_manager.addImage("ball-cyan", assets.ball_cyan);
+    asset_manager.addImage("background", assets.background);
 }

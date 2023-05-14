@@ -20,6 +20,7 @@ export class Game {
     public constructor(
         public app: HTMLElement
     ) {
+        window.game = this;
         const canvas = tgt.getElementByQuerySelector(app, "canvas", HTMLCanvasElement);
         const context = canvas.getContext("2d",  {alpha: false});
         tgt.assertNotNull(context, "No 2d context found");

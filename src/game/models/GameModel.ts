@@ -11,14 +11,20 @@ export class GameModel {
         public context: CanvasRenderingContext2D,
     ) {
         const screen_box = new Rect(0, 0, context.canvas.width, context.canvas.height);
-        this.physics = new AABBPhysicsEngine(screen_box);
+        this.physics = new AABBPhysicsEngine({
+            world_box: screen_box,
+            simple_collisions: false,
+        });
     }
 
     /**
      * Reset the game
      */
     public restart() {
-        this.physics = new AABBPhysicsEngine(this.physics.world_box);
+        this.physics = new AABBPhysicsEngine({
+            world_box: this.physics.options.world_box,
+            simple_collisions: false,
+        });
         this.entities = [];
         this.debug = false;
     }
@@ -39,10 +45,10 @@ export class GameModel {
      * @param label 
      * @returns 
      */
-    public createEntity(label: string) :Entity {
+    public createEntity(label: string): Entity {
         let entity: Entity;
-        const position = this.physics.world_box.center.cpy();
-        const color = ["red","green","blue","cyan"][Math.floor(Math.random() * 4)];
+        const position = this.physics.options.world_box.center.cpy();
+        const color = ["red", "green", "blue", "cyan"][Math.floor(Math.random() * 4)];
         const image_name = `ball-${color}`;
         this.entities.push(entity = new Entity(
             position,

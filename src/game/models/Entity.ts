@@ -1,4 +1,4 @@
-import { ImageAsset } from "../../library";
+import { ImageAsset, assert } from "../../library";
 import { Vector2D } from "../../library/math";
 import { Rect } from "../../library/math/Rect";
 import { PhysicsProxiable, PhysicsProxy } from "../../library/physics/Physics";
@@ -19,7 +19,8 @@ export class Entity implements PhysicsProxiable {
         image: ImageAsset,
     ) {
         this.image = image;
-        this.hitbox = Rect.fromCenterAndSize(position, { x: image.width, y: image.height });
+        this.hitbox = Rect.fromCenterAndSize(position, { x: image.width, y: image.height })
+            .inset(new Vector2D(6,6));
     }
 
     /**
@@ -35,6 +36,10 @@ export class Entity implements PhysicsProxiable {
      * @param other 
      */
     public onCollision(other: PhysicsProxy) {
+        assert(other.reference instanceof Entity) 
         // on collision 
+        const force = other.reference.velocity.cpy().sub(this.velocity);
+        this.velocity.add(force.cpy().mul(0.25));
+        other.reference.velocity.add(force.cpy().mul(0.25));
     }   
 }
